@@ -1,0 +1,78 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:sauve_moi/admin/editeractualite.dart';
+import 'package:sauve_moi/admin/editeralertes.dart';
+import 'package:sauve_moi/admin/accountlist.dart';
+import 'package:sauve_moi/admin/messagesadmin.dart';
+
+
+class Adminhome extends StatefulWidget {
+  @override
+  _AdminhomeState createState() => _AdminhomeState();
+}
+
+class _AdminhomeState extends State<Adminhome> {
+  //bool isAuth = false;
+  PageController pageController;
+  int pageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+
+  onPageChanged(int pageIndex) {
+    setState(() {
+      this.pageIndex = pageIndex;
+    });
+  }
+
+
+  onTap(int pageIndex) {
+    pageController.animateToPage(
+        pageIndex,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeInOut
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        children: <Widget>[
+          //Menuadmin(),
+          Editeralertes(),
+          Editeractualite(),
+          Accountlist(),
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        currentIndex: pageIndex,
+        onTap: onTap,
+        activeColor: Theme.of(context).primaryColorDark,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.message),),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications_on_outlined),),
+          //BottomNavigationBarItem(icon: Icon(Icons.search,),),
+          // size:35.0,
+          BottomNavigationBarItem(icon: Icon(Icons.whatshot),),
+          BottomNavigationBarItem(icon: Icon(Icons.account_circle),),
+
+        ],
+      ),
+    );
+  }
+}

@@ -1,0 +1,208 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:sauve_moi/pages/alerte.dart';
+import 'package:sauve_moi/pages/message.dart';
+import 'package:sauve_moi/pages/profil.dart';
+import 'package:sauve_moi/pages/recherche.dart';
+
+import 'filactualite.dart';
+import 'login.dart';
+
+class Chat extends StatefulWidget {
+  static const String id = "CHAT";
+  final FirebaseUser user;
+
+  const Chat({Key key, this.user}) : super(key: key);
+  @override
+  _ChatState createState() => _ChatState();
+}
+
+class _ChatState extends State<Chat> {
+
+  PageController pageController;
+  int pageIndex = 0;
+
+ final FirebaseAuth auth = FirebaseAuth.instance;
+ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose(){
+    pageController.dispose();
+    super.dispose();
+  }
+
+  onPageChanged(int pageIndex){
+    setState(() {
+      this.pageIndex = pageIndex;
+    });
+
+  }
+  onTap (int pageIndex ){
+    pageController.animateToPage(
+        pageIndex,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeInOut
+    );}
+
+ // TextEditingController messageController = TextEditingController();
+ // ScrollController scrollController = ScrollController();
+
+ /* Future<void> callback() async {
+    if(messageController.text.length > 0){
+      await
+      _firestore.collection('messages').add({
+        'text' : messageController.text,
+        'from' :widget.user.email,
+      });
+      messageController.clear();
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration:const Duration(milliseconds: 300),
+      );
+    }
+  }*/
+
+  @override
+  Widget build(BuildContext context) {
+    //return auth.currentUser != null ? Container(child:Text("j'ai fais une gaffe")) : Login();
+   // if (auth.currentUser != null ) {
+     // print(auth.currentUser.uid);
+      return Scaffold(
+        appBar: AppBar(
+          leading: Hero(
+          tag: 'logo',
+          child: Container(
+            height: 40.0,
+            child: Image.asset(
+              "assets/images/logo.png",
+            ),
+          ),
+        ),
+          title: Text("SauveMoi"),
+          actions:<Widget>[
+            IconButton(
+                icon: Icon(Icons.close),
+                onPressed: (){
+                 // _auth.signOut();
+                  auth.signOut();
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                }
+            )
+          ],
+        ),
+        body: PageView(
+          children: <Widget>[
+            Chat(),
+            Alerte(),
+            Recherche(),
+            Filactualite(),
+            Profil(),
+          ],
+          controller: pageController ,
+          onPageChanged: onPageChanged,
+          physics: NeverScrollableScrollPhysics(),
+        ),
+        bottomNavigationBar: CupertinoTabBar(
+          currentIndex: pageIndex ,
+          onTap: onTap,
+          activeColor: Theme.of(context).primaryColorDark ,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.message),),
+            BottomNavigationBarItem(icon: Icon(Icons.notifications_active),),
+            BottomNavigationBarItem(icon: Icon(Icons.search,),),
+            // size:35.0,
+            BottomNavigationBarItem(icon: Icon(Icons.whatshot),),
+            BottomNavigationBarItem(icon: Icon(Icons.account_circle),),
+
+          ],
+        ),
+        /*SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+             // child: StreamBuilder<QuerrySnaphot>(
+                  child: StreamBuilder<QuerrySnapshot>(
+                //stream: _firestore.collection('messages').snapshots(),
+                builder: (context, snapshot){
+                  if(!snapshot.hasData)
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+
+                 // List<DocumentSnapshot> docs = snapshot.data();
+
+                 /* List<Widget> messages = docs.map((doc) => Message(
+                    from: doc.data['from'],
+                    text: doc.data['text'],
+                    me:widget.user.email == doc.data['from']
+                  )).toList();*/
+
+                    return ListView(
+                      controller: scrollController,
+                      children: <Widget>[
+                        //...messages,
+                      ],
+                    );
+                }
+              )
+          ),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        onSubmitted: (value) => callback(),
+                        decoration: InputDecoration(
+                          hintText: "Saisir le message",
+                          border: const OutlineInputBorder(),
+                        ),
+                        controller: messageController,
+                      ),
+                    ),
+                    SendButton(
+                      text: "Envoyer",
+                      callback: callback,
+                    )
+                    ],
+                ),
+              ),
+            ],
+          ),
+        ),*/
+
+
+      );
+    //} else {
+     // return Login();
+   // }
+  }
+}
+
+/*mixin QuerrySnapshot {
+}
+
+class SendButton extends StatelessWidget{
+  final String text;
+  final VoidCallback callback;
+
+  const SendButton({Key key, this.text, this.callback}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context){
+    return FlatButton(
+      color: Colors.red,
+        onPressed: callback,
+        child: Text(text),
+    );
+  }
+}*/
