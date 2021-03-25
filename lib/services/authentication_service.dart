@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sauve_moi/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -32,5 +34,15 @@ class AuthenticationService {
     } catch (e) {
       return e.message;
     }
+  }
+
+  saveUserId(User user) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.setString('uid', user.uid);
+  }
+
+  Future getUserId() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    return _prefs.getString('uid');
   }
 }

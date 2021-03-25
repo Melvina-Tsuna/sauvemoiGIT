@@ -1,6 +1,8 @@
 //FUM1
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sauve_moi/pages/profil.dart';
 
 import 'alerte.dart';
@@ -26,7 +28,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     pageController = PageController();
-
+  }
 
   //Added
   createUserInFirestore() async {
@@ -58,7 +60,6 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-
   /*login() {
     googleSignIn.signIn();
   }
@@ -73,17 +74,10 @@ class _HomeState extends State<Home> {
     });
   }
 
-
   onTap(int pageIndex) {
-    pageController.animateToPage(
-        pageIndex,
-        duration: Duration(milliseconds: 200),
-        curve: Curves.easeInOut
-    );
+    pageController.animateToPage(pageIndex,
+        duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -105,10 +99,18 @@ class _HomeState extends State<Home> {
         onTap: onTap,
         activeColor: Theme.of(context).primaryColor,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.whatshot),),
-          BottomNavigationBarItem(icon: Icon(Icons.message),),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications_active),),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle),),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.whatshot),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications_active),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+          ),
           // BottomNavigationBarItem(icon: Icon(Icons.search,),),
           // size:35.0,
         ],

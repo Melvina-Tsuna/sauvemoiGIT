@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sauve_moi/models/user.dart';
 import 'package:sauve_moi/pages/DemandeStatut.dart';
+import 'package:sauve_moi/pages/Home.dart';
 import 'package:sauve_moi/pages/alerte.dart';
 import 'package:sauve_moi/pages/contacteradmin.dart';
+import 'package:sauve_moi/services/authentication_service.dart';
+import 'package:sauve_moi/services/firestoreService.dart';
 import 'package:sauve_moi/widgets/header.dart';
 
 // Import the firebase_core and cloud_firestore plugin
@@ -44,7 +48,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
  */
 
-
 class Profil extends StatefulWidget {
   @override
   _ProfilState createState() => _ProfilState();
@@ -53,14 +56,75 @@ class Profil extends StatefulWidget {
 class _ProfilState extends State<Profil> {
   final _formKey = GlobalKey<FormState>();
   String username;
+  FirestoreService firestoreService = FirestoreService();
+  AuthenticationService _authenticationService = AuthenticationService();
+  String currentUserId = '';
 
-  submit() {
-    _formKey.currentState.save();
-    Navigator.pop(context, username);
+  @override
+  void initState() {
+    super.initState();
+    getId();
   }
+
+  getId() async {
+    var result;
+    try {
+      result = await _authenticationService.getUserId();
+      print(result);
+    } catch (e) {}
+
+    setState(() {
+      currentUserId = result;
+    });
+  }
+
+  submit() async {
+    // _formKey.currentState.save();
+    try {
+      await firestoreService.createUser(Users(
+        idUser: currentUserId,
+        adresse: 'cotonou',
+        birthDate: '30/10/996',
+        email: 'email@gmail.com',
+        phone: '+229 61757616',
+        sexe: 'M',
+        userName: username,
+      ));
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text(
+              "Mise ajour avec succès",
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.5),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  child: new Text(
+                    "OK",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12.5),
+                  ),
+                  onPressed: () {
+                    {
+                      Navigator.pop(context);
+                    }
+                  }),
+            ],
+          );
+        },
+      );
+    } catch (e) {}
+
+    // Navigator.pop(context, username);
+  }
+
   String name;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -137,17 +201,19 @@ class _ProfilState extends State<Profil> {
                         height: 50,
                         //color: Colors.yellow,
                         child: ListTile(
-                          leading: Icon(Icons.account_circle_rounded,
-                              color: Theme.of(context).primaryColor),
+                          leading: Icon(
+                            Icons.account_circle_rounded,
+                            color: Theme.of(context).primaryColor,
+                          ),
                           title: Text(
                             "Name or Username",
                             style: TextStyle(
-                              // color: Colors.white,
+                                // color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12.5),
                           ),
                           trailing:
-                          Icon(Icons.edit_outlined, color: Colors.grey),
+                              Icon(Icons.edit_outlined, color: Colors.grey),
                         ),
                       ),
                     ),
@@ -164,12 +230,12 @@ class _ProfilState extends State<Profil> {
                           title: Text(
                             "+22900000000",
                             style: TextStyle(
-                              //color: Colors.white,
+                                //color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12.5),
                           ),
                           trailing:
-                          Icon(Icons.edit_outlined, color: Colors.grey),
+                              Icon(Icons.edit_outlined, color: Colors.grey),
                         ),
                       ),
                     ),
@@ -187,31 +253,31 @@ class _ProfilState extends State<Profil> {
                           title: Text(
                             "07-08-2000",
                             style: TextStyle(
-                              //color: Colors.white,
+                                //color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12.5),
                           ),
                           trailing:
-                          Icon(Icons.edit_outlined, color: Colors.grey),
+                              Icon(Icons.edit_outlined, color: Colors.grey),
                         ),
                       ),
                     ),
                     Card(
-                      //elevation: 8.0,
-                      //margin: new EdgeInsets.symmetric(
-                      // horizontal: 10.0, vertical: 6.0),
+                        //elevation: 8.0,
+                        //margin: new EdgeInsets.symmetric(
+                        // horizontal: 10.0, vertical: 6.0),
                         child: Container(
-                          height: 50,
-                          //color: Colors.yellow,
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                FlatButton.icon(
-                                  label: Text('M'),
-                                  icon: Radio(
-                                    /*value: Gender.MALE,
+                      height: 50,
+                      //color: Colors.yellow,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            FlatButton.icon(
+                              label: Text('M'),
+                              icon: Radio(
+                                  /*value: Gender.MALE,
                                     groupValue: _genderValue,
                                     onChanged: (Gender value) {
                                       setState(() {
@@ -219,50 +285,50 @@ class _ProfilState extends State<Profil> {
                                       });
                                     },*/
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      // _genderValue = Gender.MALE;
-                                    });
-                                  },
-                                ),
-                                FlatButton.icon(
-                                  label: Text('F'),
-                                  icon: Radio(
-                                    /*value: Gender.FEMALE,
-                                    groupValue: _genderValue,
-                                    onChanged: (Gender value) {
-                                      setState(() {
-                                        _genderValue = value;
-                                      });
-                                    },*/
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      //  _genderValue = Gender.FEMALE;
-                                    });
-                                  },
-                                ),
-                                FlatButton.icon(
-                                  label: Text(''),
-                                  icon: Radio(
-                                    /* value: Gender.OTHER,
-                                    groupValue: _genderValue,
-                                    onChanged: (Gender value) {
-                                      setState(() {
-                                        _genderValue = value;
-                                      });
-                                    },*/
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      // _genderValue = Gender.OTHER;
-                                    });
-                                  },
-                                )
-                              ],
+                              onPressed: () {
+                                setState(() {
+                                  // _genderValue = Gender.MALE;
+                                });
+                              },
                             ),
-                          ),
-                        )),
+                            FlatButton.icon(
+                              label: Text('F'),
+                              icon: Radio(
+                                  /*value: Gender.FEMALE,
+                                    groupValue: _genderValue,
+                                    onChanged: (Gender value) {
+                                      setState(() {
+                                        _genderValue = value;
+                                      });
+                                    },*/
+                                  ),
+                              onPressed: () {
+                                setState(() {
+                                  //  _genderValue = Gender.FEMALE;
+                                });
+                              },
+                            ),
+                            FlatButton.icon(
+                              label: Text(''),
+                              icon: Radio(
+                                  /* value: Gender.OTHER,
+                                    groupValue: _genderValue,
+                                    onChanged: (Gender value) {
+                                      setState(() {
+                                        _genderValue = value;
+                                      });
+                                    },*/
+                                  ),
+                              onPressed: () {
+                                setState(() {
+                                  // _genderValue = Gender.OTHER;
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
                     Card(
                       //elevation: 8.0,
                       margin: new EdgeInsets.symmetric(
@@ -276,12 +342,12 @@ class _ProfilState extends State<Profil> {
                           title: Text(
                             "Cotonou",
                             style: TextStyle(
-                              //color: Colors.white,
+                                //color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12.5),
                           ),
                           trailing:
-                          Icon(Icons.edit_outlined, color: Colors.grey),
+                              Icon(Icons.edit_outlined, color: Colors.grey),
                         ),
                       ),
                     ),
@@ -301,7 +367,7 @@ class _ProfilState extends State<Profil> {
                             children: <Widget>[
                               FlatButton.icon(
                                   label: Text(
-                                    "Demander statut",
+                                    "Sauvegarder",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -309,16 +375,17 @@ class _ProfilState extends State<Profil> {
                                   ),
                                   icon: Icon(Icons.post_add,
                                       color: Theme.of(context).primaryColor),
-                                  onPressed: (){
+                                  onPressed: () {
                                     {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => DemandeStatut()),
-                                      );
+                                      submit();
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) =>
+                                      //           DemandeStatut()),
+                                      // );
                                     }
-                                  }
-
-                              ),
+                                  }),
                             ],
                           ),
                         ),
@@ -434,7 +501,6 @@ class _ProfilState extends State<Profil> {
                       ],
                       ),
                     ),*/
-
                   ],
                 ),
               ),

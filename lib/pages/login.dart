@@ -1,10 +1,11 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sauve_moi/pages/Home.dart';
 import 'package:sauve_moi/pages/landingpage.dart';
 import 'package:sauve_moi/pages/profil.dart';
 import 'package:sauve_moi/pages/registration.dart';
+import 'package:sauve_moi/services/authentication_service.dart';
 
 import 'adminhome.dart';
 import 'chat.dart';
@@ -20,106 +21,115 @@ class _LoginState extends State<Login> {
   String email;
   String password;
   final _formKey = GlobalKey<FormState>();
+  AuthenticationService _authenticationService = AuthenticationService();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Stream<User> get authStateChanges => _auth.authStateChanges();
-  
-  Future<void> loginUser() async{
+
+  Future<void> loginUser() async {
     try {
-     //UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      //UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      print(userCredential.user.uid);
+      _authenticationService.saveUserId(userCredential.user);
 
-      if (email == "admin@gmail.com")
-        {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: new Text("Bienvenue Admin",
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.5),),
-                actions: <Widget>[
-                  FlatButton(
-                      child: new Text("OK",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.5),),
-                      onPressed: (){
-                        {
-                         // Navigator.push(context, MaterialPageRoute(builder: (context) => Adminhome(),),);
-                         // Navigator.of(context).pushNamed(Adminhome.id);
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => Adminhome()),
-                                (Route<dynamic> route) => false,
-                          );
-                        }
+      if (email == "admin@gmail.com") {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text(
+                "Bienvenue Admin",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.5),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                    child: new Text(
+                      "OK",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5),
+                    ),
+                    onPressed: () {
+                      {
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => Adminhome(),),);
+                        // Navigator.of(context).pushNamed(Adminhome.id);
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Adminhome()),
+                          (Route<dynamic> route) => false,
+                        );
                       }
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      else
-        {
-          //en cas de succes
+                    }),
+              ],
+            );
+          },
+        );
+      } else {
+        //en cas de succes
 
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: new Text("Connecté avec succès",
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.5),),
-                actions: <Widget>[
-                  FlatButton(
-                      child: new Text("OK",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.5),),
-                      onPressed: (){
-                        {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => LandingPage()),
-                            //MaterialPageRoute(builder: (context) => Profil()),
-                                (Route<dynamic> route) => false,
-                          );
-                        }
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text(
+                "Connecté avec succès",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.5),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                    child: new Text(
+                      "OK",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5),
+                    ),
+                    onPressed: () {
+                      {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          // MaterialPageRoute(builder: (context) => Home()),
+                          MaterialPageRoute(builder: (context) => Profil()),
+                          (Route<dynamic> route) => false,
+                        );
                       }
-                  ),
-                ],
-              );
-            },
-          );
-        }
-
-    } on FirebaseAuthException
-    catch (e) {
+                    }),
+              ],
+            );
+          },
+        );
+      }
+    } on FirebaseAuthException catch (e) {
       print(e);
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text(e.message,
+            title: new Text(
+              e.message,
               style: TextStyle(
                   color: Theme.of(context).primaryColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12.5),),
+                  fontSize: 12.5),
+            ),
             actions: <Widget>[
               FlatButton(
-                child: new Text("OK",
+                child: new Text(
+                  "OK",
                   style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold,
-                      fontSize: 12.5),),
+                      fontSize: 12.5),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -128,13 +138,12 @@ class _LoginState extends State<Login> {
           );
         },
       );
-      if (e.code == 'user-not-found')
-      {
+      if (e.code == 'user-not-found') {
         // print('No user found for that email.');
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Registration()),
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
       }
     }
@@ -172,8 +181,8 @@ class _LoginState extends State<Login> {
 
     }
      */
-
   }
+
   String emailValidator(String value) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -191,14 +200,13 @@ class _LoginState extends State<Login> {
     return null;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: new Stack(
         fit: StackFit.expand,
         children: <Widget>[
-         /* Expanded(
+          /* Expanded(
             child: Hero(
               tag: 'logo',
               child: Container(
@@ -227,7 +235,7 @@ class _LoginState extends State<Login> {
                       "SauveMoi",
                       style: TextStyle(
                         fontFamily: "Signatra",
-                        fontSize:50.0,
+                        fontSize: 50.0,
                         color: Theme.of(context).primaryColorDark,
                         /*colors: [
                     Theme.of(context).primaryColorDark,
@@ -235,7 +243,6 @@ class _LoginState extends State<Login> {
                   ],*/
                       ),
                     ),
-
                   ],
                 ),
                 Form(
@@ -244,7 +251,7 @@ class _LoginState extends State<Login> {
                     elevation: 0,
                     color: Colors.transparent,
                     margin:
-                    new EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+                        new EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
                     child: Column(
                       children: [
                         SizedBox(
@@ -300,14 +307,10 @@ class _LoginState extends State<Login> {
               ],
             ),
           ),
-
-
         ],
-      )
-      ,
+      ),
     );
   }
-  
 }
 
 /*
