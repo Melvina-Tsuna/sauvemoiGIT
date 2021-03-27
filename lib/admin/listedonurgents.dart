@@ -142,6 +142,7 @@ class _ListedonurgentState extends State<Listedonurgent> {
                                     width: 200,
                                     child: Center(
                                       child: Text(
+                                        //widget.mydate.toString(),
                                         widget.mydate.toString(),
                                         style: TextStyle(
                                           color: Colors.white,

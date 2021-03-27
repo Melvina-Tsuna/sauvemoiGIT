@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sauve_moi/pages/post.dart';
 import 'package:sauve_moi/pages/profil.dart';
 
 import 'alerte.dart';
@@ -85,8 +86,9 @@ class _HomeState extends State<Home> {
       body: PageView(
         children: <Widget>[
           Filactualite(),
-          Chat(),
           Alerte(),
+          Chat(),
+          Post(),
           Profil(),
           // Recherche(),
         ],
@@ -103,10 +105,13 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.whatshot),
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.notifications_active),
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.message),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_active),
+            icon: Icon(Icons.camera),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),

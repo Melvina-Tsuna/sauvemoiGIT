@@ -215,6 +215,8 @@ class _ProfilState extends State<Profil> {
                           trailing:
                               Icon(Icons.edit_outlined, color: Colors.grey),
                         ),
+
+
                       ),
                     ),
                     Card(
