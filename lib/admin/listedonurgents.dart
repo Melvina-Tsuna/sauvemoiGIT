@@ -8,7 +8,7 @@ class Listedonurgent extends StatefulWidget {
 
   //State variables
   final String group,place;
-  final DateTime mydate;
+  final String mydate;
   @override
   //_ListedonurgentState createState() => _ListedonurgentState();
   State<StatefulWidget> createState() { return new  _ListedonurgentState();}
@@ -143,7 +143,7 @@ class _ListedonurgentState extends State<Listedonurgent> {
                                     child: Center(
                                       child: Text(
                                         //widget.mydate.toString(),
-                                        widget.mydate.toString(),
+                                        widget.mydate,
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 20,

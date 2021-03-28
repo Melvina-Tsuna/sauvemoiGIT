@@ -20,7 +20,7 @@ class _AjoudonurgentState extends State<Ajoudonurgent> {
   final _formKey = GlobalKey<FormState>();
 //State variables
    String group,place;
-   DateTime mydate;
+   String mydate;
 
 
  /* String dateValidator(String value) {
@@ -100,7 +100,7 @@ class _AjoudonurgentState extends State<Ajoudonurgent> {
                         return true;
                       },
                       //onChanged: (val) => print(val),
-                      onChanged: (value) => mydate = value as DateTime,
+                      onChanged: (value) => mydate = value ,
                       validator: (val) {
                         print(val);
                         return null;
