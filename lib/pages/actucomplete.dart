@@ -38,6 +38,17 @@ class _ActucompleteState extends State<Actucomplete> {
                       image: AssetImage('assets/images/chumel.jpg'),
                     ),
                   ),
+                    Container(
+                      //decoration: new BoxDecoration(color: Colors.white),
+                      alignment: Alignment.center,
+                      height: 240,
+                      color: Colors.transparent,
+                      //child: Image.network(used_car.imageUrl,fit: BoxFit.fill)
+                      child:
+                      Image(
+                        image: AssetImage('assets/images/chumel.jpg'),
+                      ),
+                    ),
                   ],
                 ),
               ),

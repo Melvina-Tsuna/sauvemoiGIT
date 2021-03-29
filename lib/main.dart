@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
       // initialRoute: Launching.id,
       routes: {
         Launching.id: (context) => Launching(),
-        Registration.id: (context) => Registration(),
-        Login.id: (context) => Login(),
+       Registration.id: (context) => Registration(),
+       Login.id: (context) => Login(),
         Adminhome.id: (context) => Adminhome(),
         //Chat.id: (context) => Chat(),
         // Filactualite.id: (context) => Filactualite(),

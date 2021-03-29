@@ -73,7 +73,7 @@ class _EditprofilState extends State<Editprofil> {
     getId();
   }
 String sexe;
-  List<String> sexes =["Homme","Femme"];
+  List<String> Gender =['Homme','Femme'];
 
   getId() async {
     var result;
@@ -92,11 +92,6 @@ String sexe;
     try {
       await firestoreService.createUser(Users(
         idUser: currentUserId,
-       /* adresse: 'cotonou',
-        birthDate: '30/10/996',
-        email: 'email@gmail.com',
-        phone: '+229 61757616',
-        sexe: 'M',*/
         adresse: adresse,
         birthDate: birthdate,
        // email: 'email@gmail.com',
@@ -126,7 +121,13 @@ String sexe;
                   ),
                   onPressed: () {
                     {
-                      Navigator.pop(context);
+                      //Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        // MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(builder: (context) => Home()),
+                            (Route<dynamic> route) => false,
+                      );
                     }
                   }),
             ],
@@ -138,7 +139,7 @@ String sexe;
     // Navigator.pop(context, username);
   }
 
-  String name;
+ // String name;
 
   @override
   Widget build(BuildContext context) {
@@ -199,13 +200,13 @@ String sexe;
                           height: 40.0,
                         ),
                         DateTimePicker(
-                          type: DateTimePickerType.dateTimeSeparate,
+                          type: DateTimePickerType.date,
                           dateMask: 'd/MMM/yyyy',
                           initialValue: DateTime.now().toString(),
-                          firstDate: DateTime(2021),
-                          lastDate: DateTime(2100),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2013),
                           icon: Icon(Icons.event),
-                          dateLabelText: 'Date',
+                          dateLabelText: 'Date de naissance',
                           timeLabelText: "Hour",
                           selectableDayPredicate: (date) {
                             // Disable weekend days to select from the calendar
@@ -233,7 +234,7 @@ String sexe;
                           decoration: InputDecoration(
                             //icon: Icon(Icons.email),
                               border: const OutlineInputBorder(),
-                              labelText: 'Adresse'),
+                              labelText: 'Votre adresse actuelle'),
                         ),
                         SizedBox(
                           height: 40.0,
@@ -261,17 +262,44 @@ String sexe;
                             );
                           }).toList(),
                         )*/
-                        DropDownField(
+                       /* DropDownField(
                             onValueChanged: (dynamic value){
                               sexe = value;
                             },
-                          value: sexes,
+                          value: Gender,
                           required:false,
                           hintText: "Choisissez un genre",
                           labelText:'Genres',
-                          items:sexes,
+                          items:Gender,
 
-                        ),
+                        ),*/
+                    DropdownButton<String>(
+                      value: sexe,
+                      //elevation: 5,
+                      style: TextStyle(color: Colors.black),
+
+                      items: <String>[
+                        'Homme',
+                        'Femme',
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      hint: Text(
+                        "Choisissez votre genre",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      onChanged: (String value) {
+                        setState(() {
+                          sexe = value;
+                        });
+                      },
+                    ),
                         CustomButton(
                           text: "Valider",
                           callback: ()  {

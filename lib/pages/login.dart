@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sauve_moi/pages/Home.dart';
+import 'package:sauve_moi/pages/editprofil.dart';
 import 'package:sauve_moi/pages/landingpage.dart';
 import 'package:sauve_moi/pages/profil.dart';
 import 'package:sauve_moi/pages/registration.dart';
@@ -98,7 +99,7 @@ class _LoginState extends State<Login> {
                         Navigator.pushAndRemoveUntil(
                           context,
                           // MaterialPageRoute(builder: (context) => Home()),
-                          MaterialPageRoute(builder: (context) => Profil()),
+                          MaterialPageRoute(builder: (context) => Editprofil()),
                           (Route<dynamic> route) => false,
                         );
                       }
@@ -299,6 +300,23 @@ class _LoginState extends State<Login> {
                               await loginUser();
                             }
                           },
+                        ),
+                        SizedBox(
+                          height: 40.0,
+                        ),
+                        Row(
+                          children: [
+                            Text("Vous n'avez pas de compte?"),
+                            TextButton(
+                                child: Text("Inscrivez-vous ici"),
+                              onPressed:()
+                                {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => Registration()),
+                                  );
+                            }),
+                              ],
                         ),
                       ],
                     ),

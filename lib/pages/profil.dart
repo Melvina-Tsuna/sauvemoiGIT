@@ -82,7 +82,7 @@ class _ProfilState extends State<Profil> {
     // _formKey.currentState.save();
     try {
       //trasformer la ligne suivante en get user.
-      await firestoreService.createUser(Users(
+      await firestoreService.getUser(Users(
         idUser: currentUserId,
         adresse: 'cotonou',
         birthDate: '30/10/996',
@@ -207,7 +207,7 @@ class _ProfilState extends State<Profil> {
                             color: Theme.of(context).primaryColor,
                           ),
                           title: Text(
-                            username,
+                            "name and username",
                             style: TextStyle(
                                 // color: Colors.white,
                                 fontWeight: FontWeight.bold,

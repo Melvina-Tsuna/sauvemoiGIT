@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
           Filactualite(),
           Alerte(),
           Chat(),
-          Post(),
+         // Post(),
           Profil(),
           // Recherche(),
         ],
@@ -110,9 +110,9 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(Icons.message),
           ),
-          BottomNavigationBarItem(
+         /* BottomNavigationBarItem(
             icon: Icon(Icons.camera),
-          ),
+          ),*/
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
           ),
